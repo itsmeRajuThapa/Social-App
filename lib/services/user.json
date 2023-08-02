@@ -1,0 +1,112 @@
+[
+    {
+        "id": "1",
+        "fullName":"Ram",
+        "email":"ram@gmail.com",
+        "password":"Ram@1234",     
+       "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "2",
+        "fullName":"Rajesh",
+        "email":"rajesh@gmail.com",
+        "password":"Rajesh@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "3",
+        "fullName":"Rakesh",
+        "email":"rakesh@gmail.com",
+        "password":"Rakesh@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "4",
+        "fullName":"Sager",
+        "email":"sager@gmail.com",
+        "password":"Sager@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "5",
+        "fullName":"Dipendra",
+        "email":"dipendra@gmail.com",
+        "password":"Dipendra@12",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "6",
+        "fullName":"Arun",
+        "email":"arun@gmail.com",
+        "password":"Arun@1234",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "7",
+        "fullName":"Sandip",
+        "email":"sandip@gmail.com",
+        "password":"Sandip@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id":"8",
+        "fullName":"Rabin",
+        "email":"rabin@gmail.com",
+        "password":"Rabin@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id":"9",
+        "fullName":"Milan",
+        "email":"milan@gmail.com",
+        "password":"Milan@123",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    },
+    {
+        "id": "10",
+        "fullName":"Aja",
+        "email":"aja@gmail.com",
+        "password":"Aja@1234",
+        "mobileNumber": "945425224",
+        "gender":"Male",
+        "dob":"2018-12-12",      
+       " maritialStatus":"Single",        
+       "image": null
+    }
+]
