@@ -1,18 +1,66 @@
-import 'package:project/const/styles.dart';
-import 'package:project/profile/custom.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/userModel.dart';
 import '../const/colors.dart';
+import '../const/styles.dart';
+import '../profile/custom.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final UserModel? loginUsers;
-  const ProfileScreen({super.key, required this.loginUsers});
+class FriendDetails extends StatefulWidget {
+  const FriendDetails({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<FriendDetails> createState() => _FriendDetailsState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _FriendDetailsState extends State<FriendDetails> {
+  List<UserModel> profileList = [];
+  UserModel? friendId;
+  Future<List<String>> getAllUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonData = prefs.getString('dataList');
+    if (jsonData != null) {
+      try {
+        final decodedData = json.decode(jsonData) as List<dynamic>;
+
+        setState(() {
+          profileList = decodedData.map((e) => UserModel.fromJson(e)).toList();
+        });
+      } catch (e) {
+        print("error occure ${e}");
+      }
+    } else {
+      profileList = [];
+    }
+    return [];
+  }
+
+  Future<List<String>> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userIdData = prefs.getString('profileId');
+
+    if (userIdData != null) {
+      try {
+        // final decodedData = json.decode(userIdData) as List<dynamic>;
+        friendId =
+            profileList.firstWhere((user) => user.id.toString() == userIdData);
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      friendId;
+    }
+    return [];
+  }
+
+  @override
+  void initState() {
+    getAllUserData();
+    getUserId();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: SizedBox(
                       height: 300,
                       width: double.infinity,
-                      child: widget.loginUsers?.image?.path != ""
+                      child: friendId?.image?.path != ""
                           ? Image(
-                              image: FileImage(widget.loginUsers!.image!),
+                              image: FileImage(friendId!.image!),
                               fit: BoxFit.cover,
                             )
                           : const Image(
@@ -40,6 +88,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                 ),
                 Positioned(
+                    top: 0,
+                    left: 0,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: whiteColor,
+                        ))),
+                Positioned(
                   left: 120,
                   bottom: 0,
                   child: Container(
@@ -48,11 +107,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       border: Border.all(width: 6.0, color: Colors.white),
                     ),
                     child: ClipOval(
-                        child: widget.loginUsers?.image?.path != ""
+                        child: friendId?.image?.path != ""
                             ? Image(
                                 height: 100,
                                 width: 100,
-                                image: FileImage(widget.loginUsers!.image!),
+                                image: FileImage(friendId!.image!),
                                 fit: BoxFit.cover,
                               )
                             : const Image(
@@ -75,15 +134,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.loginUsers?.fullName != ""
-                      ? Text(' Name: ${widget.loginUsers!.fullName}',
+                  friendId?.fullName != ""
+                      ? Text(' Name: ${friendId!.fullName}',
                           style:
                               const TextStyle(fontFamily: bold, fontSize: 16))
                       : const Text('No Name'),
                   const SizedBox(height: 8),
-                  widget.loginUsers?.email != ""
+                  friendId?.email != ""
                       ? Text(
-                          ' Email: ${widget.loginUsers!.email}',
+                          ' Email: ${friendId!.email}',
                           style: const TextStyle(fontFamily: semibold),
                         )
                       : const Text('No Email'),
@@ -95,18 +154,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPressed: () {},
                           child: const Row(
                             children: [
-                              Icon(Icons.add),
+                              Icon(Icons.person_add_alt_1),
                               SizedBox(width: 8),
-                              Text('Add to story')
+                              Text('Add friend')
                             ],
                           )),
                       ElevatedButton(
                           onPressed: () {},
                           child: const Row(
                             children: [
-                              Icon(Icons.edit),
+                              Icon(Icons.messenger_outline_outlined),
                               SizedBox(width: 8),
-                              Text('Edit profile')
+                              Text('Message')
                             ],
                           )),
                     ],
@@ -125,10 +184,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.phone),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.mobileNumber}',
+                      '${friendId!.mobileNumber}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
-                    subtitle: Text('Mobile'),
+                    subtitle: const Text('Mobile'),
                   ),
                   const SizedBox(height: 10),
                   const Divider(
@@ -143,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.person_2_outlined),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.gender}',
+                      '${friendId!.gender}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                     subtitle: const Text('Gender'),
@@ -155,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.cake),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.dob}',
+                      '${friendId!.dob}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                     subtitle: const Text('Birthday'),
@@ -174,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.favorite_border),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.maritialStatus}',
+                      '${friendId!.maritialStatus}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                   ),

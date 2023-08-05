@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project/Model/userModel.dart';
 
 class MarketScreen extends StatefulWidget {
-  const MarketScreen({super.key});
+  const MarketScreen({super.key, UserModel? loginUsers});
 
   @override
   State<MarketScreen> createState() => _MarketScreenState();

@@ -59,10 +59,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         if (jsonData is List<dynamic>) {
           signupList =
-              jsonData.map((json) => userModel.fromJson(json)).toList();
+              jsonData.map((json) => UserModel.fromJson(json)).toList();
         } else if (jsonData is Map<String, dynamic>) {
           loginEmptyList
-              .addAll(userModel.fromJson(jsonData) as Map<String, dynamic>);
+              .addAll(UserModel.fromJson(jsonData) as Map<String, dynamic>);
         }
       } catch (e) {
         rethrow;
@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     // Shared preference
 
-    signupList.add(userModel(
+    signupList.add(UserModel(
       fullName: fullNameController.text,
       email: emailController.text,
       mobileNumber: mobileNumController.text,
@@ -79,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       gender: genderList,
       maritialStatus: selectValue,
       id: const Uuid().v4().toString(),
-      image: image,
+      image: image!,
     ));
     List<Map<String, dynamic>> jsonDataList =
         signupList.map((cv) => cv.toJson()).toList();
@@ -342,7 +342,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       setState(() {
                         try {
                           // ignore: unused_local_variable
-                          userModel user = usersData.firstWhere(
+                          UserModel user = usersData.firstWhere(
                               (user) => user.email == emailController.text);
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(

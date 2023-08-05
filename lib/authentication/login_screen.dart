@@ -3,16 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../Model/userModel.dart';
-import '../common_widget/auth_helper.dart';
 import '../common_widget/textfield.dart';
 import '../const/colors.dart';
 import '../const/styles.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
 
-List<userModel> usersData = [];
+List<UserModel> usersData = [];
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,18 +28,22 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      final jsonData = sharedPreferences.getString('dataList');
-      //  print(jsonData);
+      String? jsonString = sharedPreferences.getString('dataList');
 
-      if (jsonData == null) {
-        String? jsonData =
-            await rootBundle.loadString('lib/services/user.json');
-        final jsonList = json.decode(jsonData);
-        print(jsonList);
-        if (jsonList is List<dynamic>) {
-          usersData = jsonList.map((json) => userModel.fromJson(json)).toList();
-        } else if (jsonList is Map<String, dynamic>) {
-          usersData.add(userModel.fromJson(jsonList));
+      if (jsonString == null) {
+        String userString;
+        try {
+          userString = await rootBundle.loadString('assets/services/user.json');
+        } catch (e) {
+          print("Error loading 'user.json': $e");
+          return;
+        }
+        final jsonData = json.decode(userString);
+
+        if (jsonData is List<dynamic>) {
+          usersData = jsonData.map((json) => UserModel.fromJson(json)).toList();
+        } else if (jsonData is Map<String, dynamic>) {
+          usersData.add(UserModel.fromJson(jsonData));
         }
         List<Map<String, dynamic>> jsonDataList =
             usersData.map((cv) => cv.toJson()).toList();
@@ -49,22 +52,21 @@ class _LoginScreenState extends State<LoginScreen> {
         sharedPreferences.setString('dataList', jsonDataString);
       }
     } catch (e) {
+      //  print(e);
       rethrow;
     }
-
-    // Parse the jsonData from SharedPreferences
   }
 
   Future<List<String>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonData = prefs.getString('dataList');
-    print("asa${jsonData}");
+
     if (jsonData != null) {
       try {
         final decodedData = json.decode(jsonData) as List<dynamic>;
 
         setState(() {
-          usersData = decodedData.map((e) => userModel.fromJson(e)).toList();
+          usersData = decodedData.map((e) => UserModel.fromJson(e)).toList();
         });
       } catch (e) {
         rethrow;
@@ -80,29 +82,55 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       // ignore: unused_local_variable
-      userModel users = usersData.firstWhere(
+      UserModel users = usersData.firstWhere(
         (user) => user.email == emaill && user.password == passwordd,
       );
       prefs.setString('userID', users.id.toString());
-      await AuthHelper.setUserLoggedIn();
+      prefs.setString('email', emaill);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MainScreen()));
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Center(
-            child: Text(
-          'Login Sucessfully',
-        )),
-        backgroundColor: Colors.green,
-      ));
+      final materialBanner = MaterialBanner(
+        elevation: 3,
+        backgroundColor: Colors.transparent,
+        forceActionsBelow: true,
+        content: AwesomeSnackbarContent(
+          title: 'Congratulations!!!',
+          message:
+              'You have successfully login your account.\n Have a great experience',
+          contentType: ContentType.success,
+          inMaterialBanner: true,
+        ),
+        actions: const [SizedBox.shrink()],
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentMaterialBanner()
+        ..showMaterialBanner(materialBanner);
 
       return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Center(child: Text('Email or Password Incorrect')),
-        backgroundColor: Colors.red,
-      ));
+      final materialBanner = MaterialBanner(
+        elevation: 3,
+        backgroundColor: Colors.transparent,
+        forceActionsBelow: true,
+        content: AwesomeSnackbarContent(
+          title: '  Oh Hey!!',
+          message:
+              ' Please write correct Email & Password \n  Email or password doesnot match!',
+          contentType: ContentType.failure,
+          inMaterialBanner: true,
+        ),
+        actions: const [SizedBox.shrink()],
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentMaterialBanner()
+        ..showMaterialBanner(materialBanner);
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   content: Center(child: Text('Email or Password Incorrect')),
+      //   backgroundColor: Colors.red,
+      // ));
       return false;
     }
   }

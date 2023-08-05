@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:project/authentication/login_screen.dart';
+import 'package:project/authentication/main_screen.dart';
 import 'package:project/const/colors.dart';
-import 'package:project/feed/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common_widget/auth_helper.dart';
+// ignore: prefer_typing_uninitialized_variables
+var finalEmail;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,13 +21,22 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // await AuthHelper.isUserLoggedIn()== true? ;
-    Timer(
-        const Duration(seconds: 3),
-        () => AuthHelper.isUserLoggedIn() == true
-            ? Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => const HomeScreen()))
-            : Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => const LoginScreen())));
+    getValidationData().whenComplete(() {
+      Timer(
+          const Duration(seconds: 3),
+          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => finalEmail == null
+                  ? const LoginScreen()
+                  : const MainScreen())));
+    });
+  }
+
+  Future getValidationData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var optainedEmail = prefs.getString('email');
+    setState(() {
+      finalEmail = optainedEmail;
+    });
   }
 
   @override

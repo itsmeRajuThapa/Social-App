@@ -7,19 +7,19 @@
        "mobileNumber": "945425224",
         "gender":"Male",
         "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+       "maritialStatus":"Single",        
+       "image": ""
     },
     {
         "id": "2",
         "fullName":"Rajesh",
         "email":"rajesh@gmail.com",
         "password":"Rajesh@123",
-        "mobileNumber": "945425224",
+        "mobileNumber": "9810000000",
         "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "dob":"2006-03-03",      
+       "maritialStatus":"Married",        
+       "image": ""
     },
     {
         "id": "3",
@@ -27,10 +27,10 @@
         "email":"rakesh@gmail.com",
         "password":"Rakesh@123",
         "mobileNumber": "945425224",
-        "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "gender":"Female",
+        "dob":"2023-12-12",      
+       "maritialStatus":"Single",        
+       "image": ""
     },
     {
         "id": "4",
@@ -40,73 +40,73 @@
         "mobileNumber": "945425224",
         "gender":"Male",
         "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+       "maritialStatus":"Married",        
+       "image": ""
     },
     {
         "id": "5",
         "fullName":"Dipendra",
         "email":"dipendra@gmail.com",
         "password":"Dipendra@12",
-        "mobileNumber": "945425224",
+        "mobileNumber": "981290832",
         "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "dob":"1999-06-12",      
+       "maritialStatus":"Single",        
+       "image": ""
     },
     {
         "id": "6",
         "fullName":"Arun",
         "email":"arun@gmail.com",
         "password":"Arun@1234",
-        "mobileNumber": "945425224",
+        "mobileNumber": "98603983123",
         "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "dob":"2000-09-30",      
+       "maritialStatus":"Single",        
+       "image": ""
     },
     {
         "id": "7",
         "fullName":"Sandip",
         "email":"sandip@gmail.com",
         "password":"Sandip@123",
-        "mobileNumber": "945425224",
-        "gender":"Male",
+        "mobileNumber": "9810425224",
+        "gender":"Female",
         "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+       "maritialStatus":"Married",        
+       "image": ""
     },
     {
         "id":"8",
         "fullName":"Rabin",
         "email":"rabin@gmail.com",
         "password":"Rabin@123",
-        "mobileNumber": "945425224",
+        "mobileNumber": "982341230",
         "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "dob":"2020-01-20",      
+       "maritialStatus":"Married",        
+       "image": ""
     },
     {
         "id":"9",
         "fullName":"Milan",
         "email":"milan@gmail.com",
         "password":"Milan@123",
-        "mobileNumber": "945425224",
+        "mobileNumber": "98102303203",
         "gender":"Male",
-        "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+        "dob":"2010-09-10",      
+       "maritialStatus":"Single",        
+       "image": ""
     },
     {
         "id": "10",
         "fullName":"Aja",
         "email":"aja@gmail.com",
         "password":"Aja@1234",
-        "mobileNumber": "945425224",
+        "mobileNumber": "983092349",
         "gender":"Male",
         "dob":"2018-12-12",      
-       " maritialStatus":"Single",        
-       "image": null
+       "maritialStatus":"Married",        
+       "image": ""
     }
 ]

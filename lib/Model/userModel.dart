@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class userModel {
+class UserModel {
   String? id;
   String? fullName;
   String? email;
@@ -11,7 +11,7 @@ class userModel {
   String? maritialStatus;
   File? image;
 
-  userModel({
+  UserModel({
     this.id,
     this.fullName,
     this.email,
@@ -23,12 +23,9 @@ class userModel {
     this.image,
   });
 
-  factory userModel.fromJson(Map<String, dynamic> json) {
-    File? image;
-    if (json["image"] != "") {
-      image = File(json["image"]);
-    }
-    return userModel(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    String imagePath = json["image"] ?? "";
+    return UserModel(
       id: json["id"],
       fullName: json["fullName"],
       email: json["email"],
@@ -37,7 +34,7 @@ class userModel {
       dob: json["dob"],
       password: json["password"],
       maritialStatus: json["maritialStatus"],
-      image: image!,
+      image: File(imagePath),
     );
   }
   Map<String, dynamic> toJson() {
@@ -54,6 +51,8 @@ class userModel {
       "image": imagePath,
     };
   }
+
+  toLowerCase() {}
 }
 
-List<userModel> signupList = [];
+List<UserModel> signupList = [];
