@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:project/authentication/login_screen.dart';
-import 'package:project/authentication/main_screen.dart';
-import 'package:project/const/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:project/const/import.dart';
+
+import 'login_screen.dart';
 
 // ignore: prefer_typing_uninitialized_variables
 var finalEmail;

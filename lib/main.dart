@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:project/const/colors.dart';
-import 'authentication/splash_screen.dart';
+import 'package:project/const/import.dart';
 
 void main() {
   runApp(const MyApp());

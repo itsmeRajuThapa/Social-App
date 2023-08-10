@@ -1,18 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:project/const/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
-//import 'package:uuid/uuid_util.dart';
+import '../common_widget/radio_button.dart';
+import 'package:project/const/import.dart';
 
-import '../Model/userModel.dart';
-import '../common_widget/textfield.dart';
 import 'login_screen.dart';
-import 'radio_button.dart';
 
 Map<String, dynamic> signUpEmptyList = {};
 Map<String, dynamic> loginEmptyList = {};
@@ -55,15 +45,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // print('aa${jsonString}');
     if (jsonString != null) {
       try {
-        final jsonData = jsonDecode(jsonString);
+        final jsonData = jsonDecode(jsonString) as List<dynamic>;
 
-        if (jsonData is List<dynamic>) {
+        setState(() {
           signupList =
               jsonData.map((json) => UserModel.fromJson(json)).toList();
-        } else if (jsonData is Map<String, dynamic>) {
-          loginEmptyList
-              .addAll(UserModel.fromJson(jsonData) as Map<String, dynamic>);
-        }
+        });
       } catch (e) {
         rethrow;
       }
@@ -78,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       password: passwordController.text,
       gender: genderList,
       maritialStatus: selectValue,
-      id: const Uuid().v4().toString(),
+      id: const Uuid().v4(),
       image: image!,
     ));
     List<Map<String, dynamic>> jsonDataList =
@@ -175,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 6),
               textform(
                 validate: (value) {
-                  RegExp regexp = RegExp(r'^[a-zA-Z]{0,20}$');
+                  RegExp regexp = RegExp(r'^[a-z A-Z]{0,20}$');
                   if (value.isEmpty) {
                     return 'Please enter FullName';
                   } else {
@@ -342,7 +329,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       setState(() {
                         try {
                           // ignore: unused_local_variable
-                          UserModel user = usersData.firstWhere(
+                          UserModel user = usersDataList.firstWhere(
                               (user) => user.email == emailController.text);
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
@@ -408,8 +395,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         children: [
+          const SizedBox(height: 20),
           const Text('Choose Profile photo'),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,11 +1,6 @@
-import 'dart:convert';
+import 'package:project/const/import.dart';
 
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Model/userModel.dart';
-import '../const/colors.dart';
-import '../const/styles.dart';
-import '../profile/custom.dart';
+import '../Model/userFriendListModel.dart';
 
 class FriendDetails extends StatefulWidget {
   const FriendDetails({super.key});
@@ -17,6 +12,7 @@ class FriendDetails extends StatefulWidget {
 class _FriendDetailsState extends State<FriendDetails> {
   List<UserModel> profileList = [];
   UserModel? friendId;
+  UserModel? ownId;
   Future<List<String>> getAllUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonData = prefs.getString('dataList');
@@ -32,6 +28,24 @@ class _FriendDetailsState extends State<FriendDetails> {
       }
     } else {
       profileList = [];
+    }
+    return [];
+  }
+
+  Future<List<String>> getOwneId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userIdData = prefs.getString('userID');
+
+    if (userIdData != null) {
+      try {
+        // final decodedData = json.decode(userIdData) as List<dynamic>;
+        ownId =
+            profileList.firstWhere((user) => user.id.toString() == userIdData);
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      ownId;
     }
     return [];
   }
@@ -54,12 +68,62 @@ class _FriendDetailsState extends State<FriendDetails> {
     return [];
   }
 
+  Map<String, dynamic> requestEmptyList = {};
+  List<UserFriendListModel> sentRequest = [];
+  void sendRequest() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final jsonString = sharedPreferences.getString('request');
+    if (jsonString != null) {
+      try {
+        final jsonData = jsonDecode(jsonString);
+
+        if (jsonData is List<dynamic>) {
+          requestAcceptOrCancle = jsonData
+              .map((json) => UserFriendListModel.fromJson(json))
+              .toList();
+        } else if (jsonData is Map<String, dynamic>) {
+          requestEmptyList
+              .addAll(UserModel.fromJson(jsonData) as Map<String, dynamic>);
+        }
+      } catch (e) {
+        rethrow;
+      }
+    }
+    // Shared preference
+
+    requestAcceptOrCancle.add(UserFriendListModel(
+      user_list_id: const Uuid().v4(),
+      createdAt: DateTime.now().toString(),
+      hasNewRequest: true,
+      friendId: friendId!.id,
+      userId: ownId!.id,
+      hasNewRequestAccepted: false,
+      requestedBy: ownId!.id,
+      hasRemoved: false,
+    ));
+    List<Map<String, dynamic>> jsonDataList =
+        requestAcceptOrCancle.map((cv) => cv.toJson()).toList();
+
+    String jsonData = json.encode(jsonDataList);
+    sharedPreferences.setString('request', jsonData);
+  }
+
+  UserFriendListModel? friendji;
+  void compare() {
+    friendji =
+        requestAcceptOrCancle.firstWhere((e) => e.friendId == friendId!.id);
+  }
+
   @override
   void initState() {
     getAllUserData();
     getUserId();
+    sendRequest();
+    //compare();
     super.initState();
   }
+
+  bool newRequest = true;
 
   @override
   Widget build(BuildContext context) {
@@ -81,18 +145,20 @@ class _FriendDetailsState extends State<FriendDetails> {
                               image: FileImage(friendId!.image!),
                               fit: BoxFit.cover,
                             )
-                          : const Image(
-                              image: NetworkImage(
-                                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fiso.500px.com%2Fwp-content%2Fuploads%2F2016%2F05%2Fstock-photo-123002079-1500x1000.jpg&f=1&nofb=1&ipt=3a8ace2a1afa4697e90bff25ac5ed90ec1132af6292a26e7b6e15dc555e8b288&ipo=images"),
+                          : Image(
+                              image: AssetImage('${friendId!.imageUrl}'),
                               fit: BoxFit.cover,
                             )),
                 ),
                 Positioned(
-                    top: 0,
-                    left: 0,
+                    top: 15,
+                    left: 5,
                     child: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainScreen()));
                         },
                         icon: Icon(
                           Icons.arrow_back,
@@ -114,11 +180,10 @@ class _FriendDetailsState extends State<FriendDetails> {
                                 image: FileImage(friendId!.image!),
                                 fit: BoxFit.cover,
                               )
-                            : const Image(
+                            : Image(
                                 height: 100,
                                 width: 100,
-                                image: NetworkImage(
-                                    "https://imgs.search.brave.com/eyBWfBl_gk-E_C3l1t9cu58zTKpn24wX9TuMUiARvss/rs:fit:860:0:0/g:ce/aHR0cHM6Ly93d3cu/aW1uZXBhbC5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMTcv/MTEvTmVwYWxpLUFj/dG9yLVN1cGVyc3Rh/ci1SYWplc2gtSGFt/YWwtUGljdHVyZS5q/cGc"),
+                                image: AssetImage('${friendId!.imageUrl}'),
                                 fit: BoxFit.cover,
                               )),
                   ),
@@ -151,12 +216,18 @@ class _FriendDetailsState extends State<FriendDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                          onPressed: () {},
-                          child: const Row(
+                          onPressed: () {
+                            setState(() {
+                              sendRequest();
+                            });
+                          },
+                          child: Row(
                             children: [
-                              Icon(Icons.person_add_alt_1),
-                              SizedBox(width: 8),
-                              Text('Add friend')
+                              // Icon(Icons.person_add_alt_1),
+                              // SizedBox(width: 8),
+                              // friendji?.hasNewRequest == false
+                              //     ? Text('Cancle Request')
+                              //     : Text('Add friend')
                             ],
                           )),
                       ElevatedButton(

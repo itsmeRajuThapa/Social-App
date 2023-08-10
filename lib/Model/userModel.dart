@@ -1,7 +1,7 @@
-import 'dart:io';
+import 'package:project/const/import.dart';
 
 class UserModel {
-  String? id;
+  String id;
   String? fullName;
   String? email;
   String? mobileNumber;
@@ -10,18 +10,19 @@ class UserModel {
   String? password;
   String? maritialStatus;
   File? image;
+  String? imageUrl;
 
-  UserModel({
-    this.id,
-    this.fullName,
-    this.email,
-    this.mobileNumber,
-    this.gender,
-    this.dob,
-    this.password,
-    this.maritialStatus,
-    this.image,
-  });
+  UserModel(
+      {required this.id,
+      this.fullName,
+      this.email,
+      this.mobileNumber,
+      this.gender,
+      this.dob,
+      this.password,
+      this.maritialStatus,
+      this.image,
+      this.imageUrl});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     String imagePath = json["image"] ?? "";
@@ -35,6 +36,7 @@ class UserModel {
       password: json["password"],
       maritialStatus: json["maritialStatus"],
       image: File(imagePath),
+      imageUrl: json["imageUrl"],
     );
   }
   Map<String, dynamic> toJson() {
@@ -49,6 +51,7 @@ class UserModel {
       "password": password,
       "maritialStatus": maritialStatus,
       "image": imagePath,
+      "imageUrl": imageUrl
     };
   }
 

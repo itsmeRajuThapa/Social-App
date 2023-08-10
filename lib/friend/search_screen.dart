@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:project/friend/friends_details.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Model/userModel.dart';
+import 'package:project/const/import.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  final List<UserModel> searchList;
-
-  CustomSearchDelegate(this.searchList);
+  CustomSearchDelegate();
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -15,7 +10,7 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       ),
     ];
   }
@@ -26,13 +21,13 @@ class CustomSearchDelegate extends SearchDelegate {
       onPressed: () {
         close(context, null);
       },
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    List<UserModel> matchQuery = searchList.where((user) {
+    List<UserModel> matchQuery = usersData.where((user) {
       return user.fullName!.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
@@ -44,8 +39,9 @@ class CustomSearchDelegate extends SearchDelegate {
           onTap: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('profileId', result.id.toString());
+            // ignore: use_build_context_synchronously
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FriendDetails()));
+                MaterialPageRoute(builder: (context) => const FriendDetails()));
           },
           child: Card(
             color: const Color.fromARGB(255, 246, 211, 211),
@@ -59,10 +55,10 @@ class CustomSearchDelegate extends SearchDelegate {
                           image: FileImage(result.image!),
                           fit: BoxFit.cover,
                         )
-                      : const Image(
+                      : Image(
                           height: 60,
                           width: 60,
-                          image: AssetImage('assets/logo.png'),
+                          image: AssetImage('${result.imageUrl}'),
                           fit: BoxFit.cover,
                         )),
               subtitle: Text('${result.email}'),
@@ -75,7 +71,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<UserModel> matchQuery = searchList.where((user) {
+    List<UserModel> matchQuery = usersData.where((user) {
       return user.fullName!.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
@@ -88,25 +84,24 @@ class CustomSearchDelegate extends SearchDelegate {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('profileId', result.id.toString());
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FriendDetails()));
+                MaterialPageRoute(builder: (context) => const FriendDetails()));
           },
           child: Card(
             color: const Color.fromARGB(255, 246, 211, 211),
             child: ListTile(
               title: Text('${result.fullName}'),
-              leading: CircleAvatar(
-                  // backgroundColor: textfieldGrey,
+              leading: ClipOval(
                   child: result.image?.path != ""
                       ? Image(
-                          height: 80,
-                          width: 80,
+                          height: 60,
+                          width: 60,
                           image: FileImage(result.image!),
                           fit: BoxFit.cover,
                         )
-                      : const Image(
-                          height: 80,
-                          width: 80,
-                          image: AssetImage('assets/logo.png'),
+                      : Image(
+                          height: 60,
+                          width: 60,
+                          image: AssetImage('${result.imageUrl}'),
                           fit: BoxFit.cover,
                         )),
               subtitle: Text('${result.email}'),

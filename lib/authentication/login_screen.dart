@@ -1,17 +1,9 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import '../Model/userModel.dart';
-import '../common_widget/textfield.dart';
-import '../const/colors.dart';
-import '../const/styles.dart';
-import 'main_screen.dart';
+import '../forget_password/change_password.dart';
 import 'signup_screen.dart';
+import 'package:project/const/import.dart';
 
-List<UserModel> usersData = [];
+List<UserModel> usersDataList = [];
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -41,12 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final jsonData = json.decode(userString);
 
         if (jsonData is List<dynamic>) {
-          usersData = jsonData.map((json) => UserModel.fromJson(json)).toList();
+          usersDataList =
+              jsonData.map((json) => UserModel.fromJson(json)).toList();
         } else if (jsonData is Map<String, dynamic>) {
-          usersData.add(UserModel.fromJson(jsonData));
+          usersDataList.add(UserModel.fromJson(jsonData));
         }
         List<Map<String, dynamic>> jsonDataList =
-            usersData.map((cv) => cv.toJson()).toList();
+            usersDataList.map((cv) => cv.toJson()).toList();
 
         String jsonDataString = json.encode(jsonDataList);
         sharedPreferences.setString('dataList', jsonDataString);
@@ -66,13 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
         final decodedData = json.decode(jsonData) as List<dynamic>;
 
         setState(() {
-          usersData = decodedData.map((e) => UserModel.fromJson(e)).toList();
+          usersDataList =
+              decodedData.map((e) => UserModel.fromJson(e)).toList();
         });
       } catch (e) {
         rethrow;
       }
     } else {
-      usersData = [];
+      usersDataList = [];
     }
     return [];
   }
@@ -82,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       // ignore: unused_local_variable
-      UserModel users = usersData.firstWhere(
+      UserModel users = usersDataList.firstWhere(
         (user) => user.email == emaill && user.password == passwordd,
       );
       prefs.setString('userID', users.id.toString());
@@ -127,10 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context)
         ..hideCurrentMaterialBanner()
         ..showMaterialBanner(materialBanner);
-      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      //   content: Center(child: Text('Email or Password Incorrect')),
-      //   backgroundColor: Colors.red,
-      // ));
       return false;
     }
   }
@@ -258,7 +248,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 40,
                   ),
                   TextButton(
-                      onPressed: () {}, child: const Text('Forget Password')),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ComparedEmail()));
+                      },
+                      child: const Text('Forget Password')),
                 ],
               ),
               // const SizedBox(height: 8),

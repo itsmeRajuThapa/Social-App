@@ -1,112 +1,120 @@
 [
     {
         "id": "1",
-        "fullName":"Ram",
+        "fullName":"Ram Lama",
         "email":"ram@gmail.com",
         "password":"Ram@1234",     
        "mobileNumber": "945425224",
         "gender":"Male",
         "dob":"2018-12-12",      
        "maritialStatus":"Single",        
-       "image": ""
+       "image": "",
+       "imageUrl":"assets/profile/1.jpg"
+
     },
     {
         "id": "2",
-        "fullName":"Rajesh",
+        "fullName":"Rajesh Hamal",
         "email":"rajesh@gmail.com",
         "password":"Rajesh@123",
         "mobileNumber": "9810000000",
         "gender":"Male",
         "dob":"2006-03-03",      
        "maritialStatus":"Married",        
-       "image": ""
+       "image": "",
+       "imageUrl":"assets/profile/2.jpg"
     },
     {
         "id": "3",
-        "fullName":"Rakesh",
+        "fullName":"Rakesh KC",
         "email":"rakesh@gmail.com",
         "password":"Rakesh@123",
         "mobileNumber": "945425224",
         "gender":"Female",
         "dob":"2023-12-12",      
        "maritialStatus":"Single",        
-       "image": ""
+       "image": "",
+       "imageUrl":"assets/profile/3.jpg"
     },
     {
         "id": "4",
-        "fullName":"Sager",
+        "fullName":"Sager Shrestha",
         "email":"sager@gmail.com",
         "password":"Sager@123",
         "mobileNumber": "945425224",
         "gender":"Male",
         "dob":"2018-12-12",      
        "maritialStatus":"Married",        
-       "image": ""
+       "image": "",
+       "imageUrl":"assets/profile/4.jpg"
     },
     {
         "id": "5",
-        "fullName":"Dipendra",
+        "fullName":"Dipendra Pahadi",
         "email":"dipendra@gmail.com",
         "password":"Dipendra@12",
         "mobileNumber": "981290832",
         "gender":"Male",
         "dob":"1999-06-12",      
        "maritialStatus":"Single",        
-       "image": ""
+       "image": "",
+       "imageUrl":"assets/profile/5.jpg"
     },
     {
         "id": "6",
-        "fullName":"Arun",
+        "fullName":"Arun Subadi",
         "email":"arun@gmail.com",
         "password":"Arun@1234",
         "mobileNumber": "98603983123",
         "gender":"Male",
         "dob":"2000-09-30",      
        "maritialStatus":"Single",        
-       "image": ""
-    },
+       "image": "",
+       "imageUrl":"assets/profile/6.jpg"        },
     {
         "id": "7",
-        "fullName":"Sandip",
+        "fullName":"Sandip Shrestha",
         "email":"sandip@gmail.com",
         "password":"Sandip@123",
         "mobileNumber": "9810425224",
         "gender":"Female",
         "dob":"2018-12-12",      
        "maritialStatus":"Married",        
-       "image": ""
-    },
+       "image": "",
+       "imageUrl":"assets/profile/7.jpg"        },
     {
         "id":"8",
-        "fullName":"Rabin",
+        "fullName":"Rabin Regmi",
         "email":"rabin@gmail.com",
         "password":"Rabin@123",
         "mobileNumber": "982341230",
         "gender":"Male",
         "dob":"2020-01-20",      
        "maritialStatus":"Married",        
-       "image": ""
+      "image": "",
+      "imageUrl":"assets/profile/8.jpg"
     },
     {
         "id":"9",
-        "fullName":"Milan",
+        "fullName":"Milan Aryal",
         "email":"milan@gmail.com",
         "password":"Milan@123",
         "mobileNumber": "98102303203",
         "gender":"Male",
         "dob":"2010-09-10",      
        "maritialStatus":"Single",        
-       "image": ""
-    },
+       "image": "",
+       "imageUrl":"assets/profile/9.jpg"
+           },
     {
         "id": "10",
-        "fullName":"Aja",
+        "fullName":"Aja Gurung",
         "email":"aja@gmail.com",
         "password":"Aja@1234",
         "mobileNumber": "983092349",
         "gender":"Male",
         "dob":"2018-12-12",      
        "maritialStatus":"Married",        
-       "image": ""
-    }
+       "image": "",
+       "imageUrl":"assets/profile/10.jpg"    }
 ]

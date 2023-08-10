@@ -1,12 +1,7 @@
-import 'package:project/const/styles.dart';
-import 'package:project/profile/custom.dart';
-import 'package:flutter/material.dart';
-import '../Model/userModel.dart';
-import '../const/colors.dart';
+import 'package:project/const/import.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final UserModel? loginUsers;
-  const ProfileScreen({super.key, required this.loginUsers});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -28,14 +23,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: SizedBox(
                       height: 300,
                       width: double.infinity,
-                      child: widget.loginUsers?.image?.path != ""
+                      child: loginUsers?.image?.path != ""
                           ? Image(
-                              image: FileImage(widget.loginUsers!.image!),
+                              image: FileImage(loginUsers!.image!),
                               fit: BoxFit.cover,
                             )
-                          : const Image(
-                              image: NetworkImage(
-                                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fiso.500px.com%2Fwp-content%2Fuploads%2F2016%2F05%2Fstock-photo-123002079-1500x1000.jpg&f=1&nofb=1&ipt=3a8ace2a1afa4697e90bff25ac5ed90ec1132af6292a26e7b6e15dc555e8b288&ipo=images"),
+                          : Image(
+                              image: AssetImage("${loginUsers!.imageUrl}"),
                               fit: BoxFit.cover,
                             )),
                 ),
@@ -48,18 +42,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       border: Border.all(width: 6.0, color: Colors.white),
                     ),
                     child: ClipOval(
-                        child: widget.loginUsers?.image?.path != ""
+                        child: loginUsers?.image?.path != ""
                             ? Image(
                                 height: 100,
                                 width: 100,
-                                image: FileImage(widget.loginUsers!.image!),
+                                image: FileImage(loginUsers!.image!),
                                 fit: BoxFit.cover,
                               )
-                            : const Image(
+                            : Image(
                                 height: 100,
                                 width: 100,
-                                image: NetworkImage(
-                                    "https://imgs.search.brave.com/eyBWfBl_gk-E_C3l1t9cu58zTKpn24wX9TuMUiARvss/rs:fit:860:0:0/g:ce/aHR0cHM6Ly93d3cu/aW1uZXBhbC5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMTcv/MTEvTmVwYWxpLUFj/dG9yLVN1cGVyc3Rh/ci1SYWplc2gtSGFt/YWwtUGljdHVyZS5q/cGc"),
+                                image: AssetImage("${loginUsers!.imageUrl}"),
                                 fit: BoxFit.cover,
                               )),
                   ),
@@ -75,15 +68,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.loginUsers?.fullName != ""
-                      ? Text(' Name: ${widget.loginUsers!.fullName}',
+                  loginUsers?.fullName != ""
+                      ? Text(' Name: ${loginUsers!.fullName}',
                           style:
                               const TextStyle(fontFamily: bold, fontSize: 16))
                       : const Text('No Name'),
                   const SizedBox(height: 8),
-                  widget.loginUsers?.email != ""
+                  loginUsers?.email != ""
                       ? Text(
-                          ' Email: ${widget.loginUsers!.email}',
+                          ' Email: ${loginUsers!.email}',
                           style: const TextStyle(fontFamily: semibold),
                         )
                       : const Text('No Email'),
@@ -116,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 20,
                     thickness: 2,
                   ),
-                  const Text('Contract info',
+                  const Text('Contact info',
                       style: TextStyle(fontFamily: bold)),
                   const SizedBox(height: 5),
                   ListTile(
@@ -125,10 +118,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.phone),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.mobileNumber}',
+                      '${loginUsers!.mobileNumber}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
-                    subtitle: Text('Mobile'),
+                    subtitle: const Text('Mobile'),
                   ),
                   const SizedBox(height: 10),
                   const Divider(
@@ -143,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.person_2_outlined),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.gender}',
+                      '${loginUsers!.gender}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                     subtitle: const Text('Gender'),
@@ -155,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.cake),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.dob}',
+                      '${loginUsers!.dob}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                     subtitle: const Text('Birthday'),
@@ -174,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.favorite_border),
                     ),
                     title: Text(
-                      '${widget.loginUsers!.maritialStatus}',
+                      '${loginUsers!.maritialStatus}',
                       style: const TextStyle(fontFamily: semibold),
                     ),
                   ),
@@ -194,7 +187,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'Add Work Experience',
                       style: TextStyle(fontFamily: semibold),
                     ),
-                  )
+                  ),
+                  const Divider(
+                    height: 10,
+                    thickness: 3,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            SharedPreferences sharedPerference =
+                                await SharedPreferences.getInstance();
+                            sharedPerference.remove('email');
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                          },
+                          child: const Text(
+                            "Logout",
+                            style: TextStyle(fontFamily: semibold),
+                          )))
                 ],
               ),
             )

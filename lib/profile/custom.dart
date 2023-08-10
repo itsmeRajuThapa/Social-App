@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter/cupertino.dart';
+import 'package:project/const/import.dart';
 
 class CurveClipper extends CustomClipper<Path> {
   // Layer 1

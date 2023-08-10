@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../const/colors.dart';
+import 'package:project/const/import.dart';
 
 Widget textform(
     {required String labeltext,
