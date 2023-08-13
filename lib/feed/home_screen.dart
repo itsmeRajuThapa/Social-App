@@ -57,16 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return [];
   }
 
+  void ready() async {
+    await getUserId();
+
+    await getProfileData();
+  }
+
   @override
   void initState() {
-    getUserId();
-
-    getProfileData();
-
+    ready();
     super.initState();
   }
 
-  Future<void> toggleLike(String postId) async {
+  Future<void> userLike(String postId) async {
     setState(() {
       final postIndex =
           userPostData.indexWhere((post) => post.postId == postId);
@@ -81,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String updatedPosts = jsonEncode(userPostData);
-    // List<String> updatedPosts = jsonEncode(userPostData) as List<String>;
     prefs.setString('profileData', updatedPosts);
 
     getProfileData();
@@ -281,14 +283,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               IconButton(
                                   onPressed: () {
                                     setState(() async {
-                                      await toggleLike(data.postId);
+                                      await userLike(data.postId);
                                     });
                                   },
                                   icon:
                                       data.postLikedBy.contains(loginUsers!.id)
-                                          ? // likedBy.remove(userIdRemove)
-
-                                          const Icon(Icons.favorite,
+                                          ? const Icon(Icons.favorite,
                                               color: redColor)
                                           : const Icon(
                                               Icons.favorite_border,

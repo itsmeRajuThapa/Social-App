@@ -10,45 +10,7 @@ class FriendDetails extends StatefulWidget {
 }
 
 class _FriendDetailsState extends State<FriendDetails> {
-  List<UserModel> profileList = [];
   UserModel? friendId;
-  UserModel? ownId;
-  Future<List<String>> getAllUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jsonData = prefs.getString('dataList');
-    if (jsonData != null) {
-      try {
-        final decodedData = json.decode(jsonData) as List<dynamic>;
-
-        setState(() {
-          profileList = decodedData.map((e) => UserModel.fromJson(e)).toList();
-        });
-      } catch (e) {
-        print("error occure ${e}");
-      }
-    } else {
-      profileList = [];
-    }
-    return [];
-  }
-
-  Future<List<String>> getOwneId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userIdData = prefs.getString('userID');
-
-    if (userIdData != null) {
-      try {
-        // final decodedData = json.decode(userIdData) as List<dynamic>;
-        ownId =
-            profileList.firstWhere((user) => user.id.toString() == userIdData);
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      ownId;
-    }
-    return [];
-  }
 
   Future<List<String>> getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -58,7 +20,8 @@ class _FriendDetailsState extends State<FriendDetails> {
       try {
         // final decodedData = json.decode(userIdData) as List<dynamic>;
         friendId =
-            profileList.firstWhere((user) => user.id.toString() == userIdData);
+            usersData.firstWhere((user) => user.id.toString() == userIdData);
+        print('================friend id: ${friendId?.fullName}');
       } catch (e) {
         print(e);
       }
@@ -68,27 +31,28 @@ class _FriendDetailsState extends State<FriendDetails> {
     return [];
   }
 
-  Map<String, dynamic> requestEmptyList = {};
-  List<UserFriendListModel> sentRequest = [];
-  void sendRequest() async {
+  // List<UserFriendListModel> sentRequest = [];
+  Future<void> sendRequest() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final jsonString = sharedPreferences.getString('request');
-    if (jsonString != null) {
-      try {
-        final jsonData = jsonDecode(jsonString);
+    // String? jsonString = sharedPreferences.getString('request');
+    // // print('Json: ${jsonString}');
+    // if (jsonString != null) {
+    //   try {
+    //     final jsonData = jsonDecode(jsonString) as List<dynamic>;
 
-        if (jsonData is List<dynamic>) {
-          requestAcceptOrCancle = jsonData
-              .map((json) => UserFriendListModel.fromJson(json))
-              .toList();
-        } else if (jsonData is Map<String, dynamic>) {
-          requestEmptyList
-              .addAll(UserModel.fromJson(jsonData) as Map<String, dynamic>);
-        }
-      } catch (e) {
-        rethrow;
-      }
-    }
+    //     setState(() {
+    //       sentRequest = jsonData
+    //           .map((json) => UserFriendListModel.fromJson(json))
+    //           .toList();
+    //       // print('aaaaa${sentRequest}');
+    //     });
+    //   } catch (e) {
+    //     rethrow;
+    //   }
+    // } else {
+    //   usersDataList = [];
+    // }
+
     // Shared preference
 
     requestAcceptOrCancle.add(UserFriendListModel(
@@ -96,30 +60,84 @@ class _FriendDetailsState extends State<FriendDetails> {
       createdAt: DateTime.now().toString(),
       hasNewRequest: true,
       friendId: friendId!.id,
-      userId: ownId!.id,
+      userId: loginUsers!.id,
       hasNewRequestAccepted: false,
-      requestedBy: ownId!.id,
+      requestedBy: loginUsers!.id,
       hasRemoved: false,
     ));
     List<Map<String, dynamic>> jsonDataList =
-        requestAcceptOrCancle.map((cv) => cv.toJson()).toList();
+        requestAcceptOrCancle.map((add) => add.toJson()).toList();
 
     String jsonData = json.encode(jsonDataList);
+    print('===============new data $jsonData');
+
     sharedPreferences.setString('request', jsonData);
+    getUserData();
   }
 
-  UserFriendListModel? friendji;
-  void compare() {
-    friendji =
-        requestAcceptOrCancle.firstWhere((e) => e.friendId == friendId!.id);
+  var indexOfIt;
+
+  List<UserFriendListModel> request = [];
+  Future<List<String>> getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonData = prefs.getString('request');
+    //  print(jsonData);
+
+    if (jsonData != null) {
+      try {
+        final decodedData = json.decode(jsonData) as List<dynamic>;
+
+        setState(() {
+          request =
+              decodedData.map((e) => UserFriendListModel.fromJson(e)).toList();
+        });
+        indexOfIt = request.indexWhere((e) =>
+            e.friendId == friendId!.id &&
+            e.requestedBy == loginUsers!.id &&
+            e.userId == loginUsers!.id);
+      } catch (e) {
+        rethrow;
+      }
+    } else {
+      request = [];
+    }
+    return [];
+  }
+
+  Future<void> compare() async {
+    try {
+      indexOfIt = request.indexWhere((e) =>
+          e.friendId == friendId!.id &&
+          e.requestedBy == loginUsers!.id &&
+          e.userId == loginUsers!.id);
+      setState(() async {
+        if (indexOfIt != -1) {
+          requestAcceptOrCancle.removeAt(indexOfIt);
+          String update = jsonEncode(requestAcceptOrCancle);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('request', update);
+
+          getUserData();
+        } else {
+          print('No Data');
+          getUserData();
+        }
+      });
+    } catch (e) {
+      return;
+    }
+    setState(() {});
+  }
+
+  void all() async {
+    await getUserId();
+    await getUserData();
+    //compare();
   }
 
   @override
   void initState() {
-    getAllUserData();
-    getUserId();
-    sendRequest();
-    //compare();
+    all();
     super.initState();
   }
 
@@ -160,7 +178,7 @@ class _FriendDetailsState extends State<FriendDetails> {
                               MaterialPageRoute(
                                   builder: (context) => const MainScreen()));
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back,
                           color: whiteColor,
                         ))),
@@ -215,23 +233,33 @@ class _FriendDetailsState extends State<FriendDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // ignore: unrelated_type_equality_checks
+                      //   indexOfIt != null?
+
                       ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              sendRequest();
-                            });
+                            indexOfIt != null ? compare() : sendRequest();
                           },
                           child: Row(
                             children: [
-                              // Icon(Icons.person_add_alt_1),
-                              // SizedBox(width: 8),
-                              // friendji?.hasNewRequest == false
-                              //     ? Text('Cancle Request')
-                              //     : Text('Add friend')
+                              Icon(indexOfIt != null
+                                  ? Icons.cancel
+                                  : Icons.person_add_alt_1),
+                              const SizedBox(width: 8),
+
+                              // ? Text('Cancle Request')
+                              Text(indexOfIt != null
+                                  ? 'Cancle Request'
+                                  : 'Add friend')
                             ],
                           )),
+
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              compare();
+                            });
+                          },
                           child: const Row(
                             children: [
                               Icon(Icons.messenger_outline_outlined),

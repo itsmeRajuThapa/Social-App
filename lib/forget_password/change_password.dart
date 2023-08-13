@@ -1,5 +1,4 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:project/authentication/login_screen.dart';
 import 'package:project/const/import.dart';
 
 class ComparedEmail extends StatefulWidget {
@@ -39,7 +38,6 @@ class _ComparedEmailState extends State<ComparedEmail> {
           ),
           actions: const [SizedBox.shrink()],
         );
-
         ScaffoldMessenger.of(context)
           ..hideCurrentMaterialBanner()
           ..showMaterialBanner(materialBanner);
@@ -75,14 +73,13 @@ class _ComparedEmailState extends State<ComparedEmail> {
           },
           icon: const Icon(Icons.arrow_back),
           label: const Text('Go Back')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Stack(
                   children: [
@@ -124,7 +121,8 @@ class _ComparedEmailState extends State<ComparedEmail> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text('Enter Your Past Email'),
+                Text('Enter Your Past Email', style: TextStyle(fontSize: 15)),
+                const SizedBox(height: 6),
                 textform(
                     //  keyType:  ,
                     validate: (value) {
@@ -141,7 +139,8 @@ class _ComparedEmailState extends State<ComparedEmail> {
                     hint: 'Enter Your Login Email',
                     prefixIcon: Icons.email),
                 const SizedBox(height: 12),
-                Text('Enter Your New Password'),
+                Text('Enter Your New Password', style: TextStyle(fontSize: 15)),
+                const SizedBox(height: 6),
                 TextFormField(
                   validator: (value) {
                     RegExp regex = RegExp(
@@ -199,7 +198,7 @@ class _ComparedEmailState extends State<ComparedEmail> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
                     child: const Text(
-                      'Send Email',
+                      'Send ',
                       style: TextStyle(color: whiteColor, fontSize: 20),
                     ),
                   ),
